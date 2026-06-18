@@ -93,13 +93,13 @@ my-portfolio/
 Clone the repository
 
 ```bash
-git clone https://github.com/Puspraj-Magar/portfolio.git
+git clone https://github.com/Puspraj-Magar/my-portfolio.git
 ```
 
 Navigate to the project
 
 ```bash
-cd portfolio
+cd my-portfolio
 ```
 
 Install dependencies
