@@ -58,16 +58,16 @@ export default function Hero() {
             <a href="#contact" className="px-7 py-3 rounded-full bg-indigo-500/90 hover:bg-indigo-600 text-white font-medium transition-all duration-300 shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 flex items-center gap-2 btn-pulse">
               <FaPaperPlane /> Get in Touch
             </a>
-            <a href={portfolioData.resumeLink} target="_blank" download="https://drive.google.com/file/d/19UQfXNRWsergIlaEkaDiyOybYIb9_LqF/view?usp=drive_link" className="px-7 py-3 rounded-full glass-light text-white/80 hover:text-white font-medium transition-all duration-300 flex items-center gap-2 border border-white/10 hover:border-indigo-400/30">
+            <a href={portfolioData.resumeLink} download="resume.pdf" className="px-7 py-3 rounded-full glass-light text-white/80 hover:text-white font-medium transition-all duration-300 flex items-center gap-2 border border-white/10 hover:border-indigo-400/30">
               <FaDownload /> Download Resume
             </a>
           </motion.div>
 
           <motion.div variants={itemVariants} className="mt-10 flex gap-5">
-            <a href={portfolioData.contact.github} target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-white transition text-xl"><FaGithub /></a>
-            <a href={portfolioData.contact.linkedin} target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-white transition text-xl"><FaLinkedinIn /></a>
-            <a href={`mailto:${portfolioData.contact.email}`} className="text-white/40 hover:text-white transition text-xl"><FaEnvelope /></a>
-            <a href={`tel:${portfolioData.contact.phone}`} className="text-white/40 hover:text-white transition text-xl"><FaPhone /></a>
+            <a href={portfolioData.contact.github.link} target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-white transition text-xl"><FaGithub /></a>
+            <a href={portfolioData.contact.linkedin.link} target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-white transition text-xl"><FaLinkedinIn /></a>
+            <a href={portfolioData.contact.email.link} target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-white transition text-xl"><FaEnvelope /></a>
+            <a href={portfolioData.contact.phone.link} target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-white transition text-xl"><FaPhone /></a>
           </motion.div>
         </motion.div>
       </div>

@@ -57,19 +57,19 @@ export const portfolioData = {
   certifications: [
   {
     name: "AWS Academy Generative AI Foundations",
-    link: "https://drive.google.com/file/d/1eVspNueE9DJ4Ozl2eYnCwa5MyY4dr9Fs/view?usp=drive_link"
+    link: "/certificates/aws.pdf"
   },
   {
     name: "Infosys Springboard Database and SQL",
-    link: "https://drive.google.com/file/d/1bHITObEi195Vm3WYw2sAvGek5iIivVrF/view?usp=drive_link"
+    link: "/certificates/info.pdf"
   },
   {
     name: "CompTIA Network+",
-    link: "https://drive.google.com/file/d/1F4EOiy37biCcOHH9vSAf07Z3YrnTUDcm/view?usp=drive_link"
+    link: "/certificates/net.pdf"
   },
   {
     name: "NASSCOM HTML & CSS",
-    link: "https://drive.google.com/file/d/1YqKnvJ0-qD1o7eSxPr0soDOyS5hyVik7/view?usp=drive_linkhttps://drive.google.com/file/d/1_TfGqETQYIjEMFZw1XM9xJAqnwP0Fp0E/view?usp=drive_link"
+    link: "/certificates/nass.pdf"
   }
 ],
   achievements: [
@@ -98,5 +98,5 @@ contact: {
     link: "https://github.com/Puspraj-Magar"
   }
 },
-resumeLink: 'https://drive.google.com/file/d/19UQfXNRWsergIlaEkaDiyOybYIb9_LqF/view?usp=drive_link'
+resumeLink: '/resume.pdf'
 };

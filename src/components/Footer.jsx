@@ -11,9 +11,9 @@ export default function Footer() {
           &copy; {currentYear} {portfolioData.name}. Built with <FaHeart className="text-indigo-400 inline mx-1" /> using React & Tailwind.
         </p>
         <div className="flex gap-4">
-          <a href={portfolioData.contact.github} target="_blank" rel="noopener noreferrer" className="text-white/30 hover:text-white transition text-sm"><FaGithub /></a>
-          <a href={portfolioData.contact.linkedin} target="_blank" rel="noopener noreferrer" className="text-white/30 hover:text-white transition text-sm"><FaLinkedinIn /></a>
-          <a href={`mailto:${portfolioData.contact.email}`} className="text-white/30 hover:text-white transition text-sm"><FaEnvelope /></a>
+          <a href={portfolioData.contact.github.link} target="_blank" rel="noopener noreferrer" className="text-white/30 hover:text-white transition text-sm"><FaGithub /></a>
+          <a href={portfolioData.contact.linkedin.link} target="_blank" rel="noopener noreferrer" className="text-white/30 hover:text-white transition text-sm"><FaLinkedinIn /></a>
+          <a href={portfolioData.contact.email.link} target="_blank" rel="noopener noreferrer" className="text-white/30 hover:text-white transition text-sm"><FaEnvelope /></a>
         </div>
       </div>
     </footer>
