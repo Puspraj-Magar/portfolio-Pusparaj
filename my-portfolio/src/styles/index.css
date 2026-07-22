@@ -1,0 +1,546 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ----- Global Reset & Base ----- */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #0b0b10;
+    color: #e8e8f0;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+html {
+    scroll-padding-top: 80px;
+}
+
+
+/* ----- Scrollbar ----- */
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #18181f;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #6c63ff, #a855f7);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #7c73ff, #b865ff);
+}
+
+
+/* ----- Glassmorphism base ----- */
+
+.glass {
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+}
+
+.glass-light {
+    background: rgba(255, 255, 255, 0.07);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+
+/* ----- Gradient text ----- */
+
+.gradient-text {
+    background: linear-gradient(135deg, #818cf8, #a855f7, #d946ef);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.gradient-text-blue {
+    background: linear-gradient(135deg, #60a5fa, #818cf8, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+
+/* ----- Hero animated background ----- */
+
+.hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.hero-bg .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.5;
+    animation: orbFloat 16s ease-in-out infinite alternate;
+}
+
+.hero-bg .orb:nth-child(1) {
+    width: 500px;
+    height: 500px;
+    background: #6c63ff;
+    top: -15%;
+    left: -10%;
+    animation-delay: 0s;
+}
+
+.hero-bg .orb:nth-child(2) {
+    width: 400px;
+    height: 400px;
+    background: #a855f7;
+    bottom: -20%;
+    right: -10%;
+    animation-delay: -4s;
+}
+
+.hero-bg .orb:nth-child(3) {
+    width: 300px;
+    height: 300px;
+    background: #3b82f6;
+    top: 40%;
+    left: 60%;
+    animation-delay: -8s;
+    opacity: 0.3;
+}
+
+@keyframes orbFloat {
+    0% {
+        transform: translate(0, 0) scale(1);
+    }
+    33% {
+        transform: translate(40px, -30px) scale(1.05);
+    }
+    66% {
+        transform: translate(-20px, 40px) scale(0.95);
+    }
+    100% {
+        transform: translate(30px, -20px) scale(1.02);
+    }
+}
+
+
+/* ----- Typing cursor ----- */
+
+.typing-cursor::after {
+    content: '|';
+    animation: blink 0.9s step-end infinite;
+    color: #818cf8;
+    font-weight: 300;
+}
+
+@keyframes blink {
+    0%,
+    100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+}
+
+
+/* ----- Skill bar animation ----- */
+
+.skill-bar-fill {
+    transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+
+/* ----- Project card hover ----- */
+
+.project-card {
+    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.project-card:hover {
+    transform: translateY(-8px) scale(1.01);
+    box-shadow: 0 25px 60px rgba(108, 99, 255, 0.15);
+    border-color: rgba(108, 99, 255, 0.25);
+}
+
+
+/* ----- Section fade-in (intersection) ----- */
+
+.section-fade {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.section-fade.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+/* ----- Navbar link hover underline ----- */
+
+.nav-link {
+    position: relative;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #818cf8, #a855f7);
+    transition: width 0.3s ease;
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+    width: 100%;
+}
+
+.nav-link:hover {
+    color: #c4b5fd;
+}
+
+
+/* ----- Mobile menu overlay ----- */
+
+.mobile-menu {
+    transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+
+/* ----- Loading spinner ----- */
+
+.loader {
+    width: 48px;
+    height: 48px;
+    border: 4px solid rgba(108, 99, 255, 0.15);
+    border-top: 4px solid #818cf8;
+    border-radius: 50%;
+    animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* ----- Contact form input focus ----- */
+
+.contact-input {
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.contact-input:focus {
+    outline: none;
+    border-color: #818cf8;
+    box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.15);
+    background: rgba(255, 255, 255, 0.06);
+}
+
+
+/* ----- Responsive tweaks ----- */
+
+@media (max-width: 640px) {
+    .hero-bg .orb:nth-child(1) {
+        width: 300px;
+        height: 300px;
+        top: -10%;
+    }
+    .hero-bg .orb:nth-child(2) {
+        width: 250px;
+        height: 250px;
+        bottom: -10%;
+    }
+    .hero-bg .orb:nth-child(3) {
+        width: 200px;
+        height: 200px;
+        top: 30%;
+        left: 40%;
+    }
+}
+
+
+/* ----- Theme toggle button glow ----- */
+
+.theme-toggle {
+    transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+    transform: rotate(20deg) scale(1.05);
+}
+
+
+/* ----- Button pulse animation ----- */
+
+.btn-pulse {
+    animation: pulseGlow 2.5s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+    0%,
+    100% {
+        box-shadow: 0 0 0 0 rgba(108, 99, 255, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 0 12px rgba(108, 99, 255, 0);
+    }
+}
+
+
+/* ----- Badge style ----- */
+
+.badge {
+    background: rgba(108, 99, 255, 0.12);
+    color: #a78bfa;
+    padding: 0.25rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    border: 1px solid rgba(108, 99, 255, 0.15);
+    display: inline-block;
+}
+
+
+/* Container */
+
+.container-custom {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+@media (min-width: 768px) {
+    .container-custom {
+        padding: 0 3rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .container-custom {
+        padding: 0 4rem;
+    }
+}
+
+
+/* Loading overlay */
+
+#loading-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: #0b0b10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+
+#loading-overlay.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+#loading-overlay .loader-text {
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+    color: #818cf8;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 400;
+}
+
+/* ----- Light / Dark Mode Overrides ----- */
+
+/* Base transition for components transitioning theme */
+.glass, .glass-light, .project-card, .nav-link, button, input, textarea {
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+/* Ensure document element handles background color transitions nicely */
+html {
+    transition: background-color 0.3s ease;
+}
+
+/* Light theme overrides (when .dark class is NOT present on html) */
+html:not(.dark) body {
+    background: radial-gradient(circle at 50% 0%, #f5f7ff 0%, #f1f5f9 60%, #e0e7ff 120%);
+    background-attachment: fixed;
+    color: #0f172a;
+}
+
+html:not(.dark) #loading-overlay {
+    background: #f8fafc;
+}
+
+/* Deeper gradients for high readability in light mode */
+html:not(.dark) .gradient-text {
+    background: linear-gradient(135deg, #4f46e5, #7c3aed, #db2777);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+html:not(.dark) .gradient-text-blue {
+    background: linear-gradient(135deg, #2563eb, #4f46e5, #7c3aed);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Map white text colors to slate colors for maximum legibility */
+html:not(.dark) .text-white {
+    color: #0f172a !important;
+}
+html:not(.dark) .text-white\/90 {
+    color: #1e293b !important;
+}
+html:not(.dark) .text-white\/80 {
+    color: #334155 !important;
+}
+html:not(.dark) .text-white\/70 {
+    color: #475569 !important;
+}
+html:not(.dark) .text-white\/60 {
+    color: #475569 !important;
+}
+html:not(.dark) .text-white\/50 {
+    color: #575366 !important;
+}
+html:not(.dark) .text-white\/40 {
+    color: #64748b !important;
+}
+html:not(.dark) .text-white\/30 {
+    color: #828fa3 !important;
+}
+html:not(.dark) .text-white\/20 {
+    color: rgba(15, 23, 42, 0.18) !important;
+}
+html:not(.dark) .text-white\/10 {
+    color: rgba(15, 23, 42, 0.08) !important;
+}
+
+/* Map white background & border utility classes to slate/indigo variants */
+html:not(.dark) .bg-white\/5 {
+    background-color: rgba(15, 23, 42, 0.06) !important;
+}
+html:not(.dark) .bg-white\/10 {
+    background-color: rgba(15, 23, 42, 0.08) !important;
+}
+html:not(.dark) .hover\:bg-white\/5:hover {
+    background-color: rgba(99, 102, 241, 0.08) !important;
+}
+html:not(.dark) .border-white\/5 {
+    border-color: rgba(15, 23, 42, 0.06) !important;
+}
+html:not(.dark) .border-white\/10 {
+    border-color: rgba(15, 23, 42, 0.08) !important;
+}
+
+/* Enhance element colors in light mode for readability */
+html:not(.dark) .text-indigo-300 {
+    color: #4f46e5 !important;
+}
+html:not(.dark) .text-indigo-400 {
+    color: #4f46e5 !important;
+}
+html:not(.dark) .bg-indigo-500\/10 {
+    background-color: rgba(79, 70, 229, 0.12) !important;
+}
+
+/* Glassmorphism components for light mode */
+html:not(.dark) .glass {
+    background: rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 10px 30px -5px rgba(99, 102, 241, 0.05), 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+html:not(.dark) .glass-light {
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    box-shadow: 0 4px 20px -2px rgba(99, 102, 241, 0.03);
+}
+
+/* Hover behaviors for light mode */
+html:not(.dark) .hover\:text-white:hover {
+    color: #4f46e5 !important;
+}
+
+html:not(.dark) .nav-link {
+    color: rgba(15, 23, 42, 0.75);
+}
+
+html:not(.dark) .nav-link:hover,
+html:not(.dark) .nav-link.active {
+    color: #4f46e5 !important;
+}
+
+html:not(.dark) ::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+
+html:not(.dark) .hero-bg .orb {
+    opacity: 0.12;
+}
+
+/* Form controls overrides for light mode */
+html:not(.dark) .contact-input {
+    background: rgba(255, 255, 255, 0.65);
+    border: 1px solid rgba(15, 23, 42, 0.1);
+    color: #0f172a !important;
+}
+
+html:not(.dark) .contact-input::placeholder {
+    color: rgba(15, 23, 42, 0.4) !important;
+}
+
+html:not(.dark) .contact-input:focus {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+    background: rgba(255, 255, 255, 0.9);
+}
+
+/* Badges adjustments */
+html:not(.dark) .badge {
+    background: rgba(99, 102, 241, 0.08);
+    color: #4f46e5;
+    border-color: rgba(99, 102, 241, 0.15);
+}
+
+/* Project card adjustments */
+html:not(.dark) .project-card:hover {
+    box-shadow: 0 20px 40px rgba(99, 102, 241, 0.06);
+    border-color: rgba(99, 102, 241, 0.15);
+}
