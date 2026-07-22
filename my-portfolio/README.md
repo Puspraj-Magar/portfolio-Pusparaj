@@ -1,1 +1,0 @@
-![Portfolio Preview](./screenshot/image.png)
