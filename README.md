@@ -67,7 +67,7 @@ The website features a modern user interface, smooth animations, responsive desi
 
 ## 📂 Project Structure
 
-text
+```text
 my-portfolio/
 │
 ├── my-portfolio/
