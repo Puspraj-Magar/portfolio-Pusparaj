@@ -125,6 +125,7 @@ my-portfolio/
 │   └── .gitignore
 │
 └── README.md
+```
 🚀 Installation and Setup
 1. Clone the Repository
 git clone https://github.com/Puspraj-Magar/my-portfolio.git
