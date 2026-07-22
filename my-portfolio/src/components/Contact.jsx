@@ -19,6 +19,10 @@ export default function Contact() {
     email: "",
     message: "",
   });
+  setTimeout(() => {
+  setSuccess("");
+},1000)
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -51,12 +55,12 @@ export default function Contact() {
     if (!email) {
       return "Please enter your email address.";
     }
-    
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return "Please enter a valid email address.";
     }
-    
+
     if (!message) {
       return "Please enter a message.";
     }
@@ -66,13 +70,13 @@ export default function Contact() {
   // Submit form
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     const validationError = validateForm();
     if (validationError) {
       setError(validationError);
       return;
     }
-    
+
     setLoading(true);
     setError("");
     setSuccess("");
@@ -93,10 +97,10 @@ export default function Contact() {
       const data = await response.json();
       if (!response.ok || !data.success) {
         throw new Error(
-          data.error || data.message || "Unable to send message."
+          data.error || data.message || "Unable to send message.",
         );
       }
-      
+
       setSuccess(data.message || "Message sent successfully!");
       setFormData({
         name: "",
@@ -239,15 +243,15 @@ export default function Contact() {
               </button>
 
               {error && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="text-center text-red-400 text-sm bg-red-500/10 py-2 rounded-xl border border-red-500/20"
-                >
-                  <FaExclamationCircle className="inline mr-1.5" />
-                  {error}
-                </motion.div>
-              )}
+  <motion.div
+    initial={{ opacity: 0, y: 10 }}
+    animate={{ opacity: 1, y: 0 }}
+    className="text-center text-red-400 text-sm bg-red-500/10 py-2 rounded-xl border border-red-500/20"
+  >
+    <FaExclamationCircle className="inline mr-1.5" />
+    {error}
+  </motion.div>
+)}
 
               {success && (
                 <motion.div
