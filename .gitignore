@@ -1,0 +1,7 @@
+# Frontend
+my-portfolio/node_modules/
+my-portfolio/dist/
+
+# Backend
+portfolio-backend/node_modules/
+portfolio-backend/.env
