@@ -27,7 +27,6 @@ export default function Contact() {
   // Backend URL
   const BACKEND_URL =
     import.meta.env.VITE_API_URL || "http://localhost:5000";
-
   // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
