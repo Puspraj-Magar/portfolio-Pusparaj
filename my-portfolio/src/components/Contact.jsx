@@ -19,44 +19,45 @@ export default function Contact() {
     email: "",
     message: "",
   });
-  setTimeout(() => {
-  setSuccess("");
-},1000)
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  // Determine backend URL dynamically based on environment
-  const BACKEND_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+  // Backend URL
+  const BACKEND_URL =
+    import.meta.env.VITE_API_URL || "http://localhost:5000";
 
   // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
+
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
 
-    // Clear previous messages
+    // Clear old messages while typing
     setError("");
     setSuccess("");
   };
 
-  // Validate form defensively (prevents .trim() errors)
+  // Validate form
   const validateForm = () => {
-    const name = (formData.name || "").trim();
-    const email = (formData.email || "").trim();
-    const message = (formData.message || "").trim();
+    const name = formData.name.trim();
+    const email = formData.email.trim();
+    const message = formData.message.trim();
 
     if (!name) {
       return "Please enter your name.";
     }
+
     if (!email) {
       return "Please enter your email address.";
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
     if (!emailRegex.test(email)) {
       return "Please enter a valid email address.";
     }
@@ -64,6 +65,7 @@ export default function Contact() {
     if (!message) {
       return "Please enter a message.";
     }
+
     return "";
   };
 
@@ -72,6 +74,7 @@ export default function Contact() {
     e.preventDefault();
 
     const validationError = validateForm();
+
     if (validationError) {
       setError(validationError);
       return;
@@ -95,20 +98,30 @@ export default function Contact() {
       });
 
       const data = await response.json();
+
       if (!response.ok || !data.success) {
         throw new Error(
-          data.error || data.message || "Unable to send message.",
+          data.error || data.message || "Unable to send message."
         );
       }
 
-      setSuccess(data.message || "Message sent successfully!");
+      // Show success message
+      setSuccess("Your message has been sent successfully!");
+
+      // Clear form
       setFormData({
         name: "",
         email: "",
         message: "",
       });
+
+      // Hide success message after 3 seconds
+      setTimeout(() => {
+        setSuccess("");
+      }, 3000);
     } catch (error) {
       console.error("Contact error:", error);
+
       setError(error.message || "Unable to reach the server.");
     } finally {
       setLoading(false);
@@ -122,11 +135,15 @@ export default function Contact() {
       subtitle="Let's connect and build something great together"
     >
       <div className="grid lg:grid-cols-5 gap-8 lg:gap-12">
+
         {/* Contact Information */}
         <div className="lg:col-span-2 space-y-5">
+
+          {/* Email */}
           <div className="glass rounded-2xl p-5 border border-white/5">
             <div className="flex items-center gap-3 text-white/70 text-sm">
               <FaEnvelope className="text-indigo-300 w-5 text-center" />
+
               <a
                 href={portfolioData.contact.email.link}
                 target="_blank"
@@ -138,9 +155,11 @@ export default function Contact() {
             </div>
           </div>
 
+          {/* Phone */}
           <div className="glass rounded-2xl p-5 border border-white/5">
             <div className="flex items-center gap-3 text-white/70 text-sm">
               <FaPhone className="text-indigo-300 w-5 text-center" />
+
               <a
                 href={portfolioData.contact.phone.link}
                 target="_blank"
@@ -152,9 +171,11 @@ export default function Contact() {
             </div>
           </div>
 
+          {/* GitHub */}
           <div className="glass rounded-2xl p-5 border border-white/5">
             <div className="flex items-center gap-3 text-white/70 text-sm">
               <FaGithub className="text-indigo-300 w-5 text-center" />
+
               <a
                 href={portfolioData.contact.github.link}
                 target="_blank"
@@ -166,9 +187,11 @@ export default function Contact() {
             </div>
           </div>
 
+          {/* LinkedIn */}
           <div className="glass rounded-2xl p-5 border border-white/5">
             <div className="flex items-center gap-3 text-white/70 text-sm">
               <FaLinkedinIn className="text-indigo-300 w-5 text-center" />
+
               <a
                 href={portfolioData.contact.linkedin.link}
                 target="_blank"
@@ -179,19 +202,24 @@ export default function Contact() {
               </a>
             </div>
           </div>
+
         </div>
 
         {/* Contact Form */}
         <div className="lg:col-span-3">
+
           <form
             onSubmit={handleSubmit}
             className="glass rounded-2xl p-6 md:p-3 border border-white/5"
           >
             <div className="space-y-4">
+
+              {/* Name */}
               <div>
                 <label className="text-white/40 text-sm font-medium block mb-1.5">
                   Your Name
                 </label>
+
                 <input
                   type="text"
                   name="name"
@@ -203,10 +231,12 @@ export default function Contact() {
                 />
               </div>
 
+              {/* Email */}
               <div>
                 <label className="text-white/40 text-sm font-medium block mb-1.5">
                   Email Address
                 </label>
+
                 <input
                   type="email"
                   name="email"
@@ -218,10 +248,12 @@ export default function Contact() {
                 />
               </div>
 
+              {/* Message */}
               <div>
                 <label className="text-white/40 text-sm font-medium block mb-1.5">
                   Message
                 </label>
+
                 <textarea
                   name="message"
                   rows="4"
@@ -233,26 +265,31 @@ export default function Contact() {
                 />
               </div>
 
+              {/* Submit Button */}
               <button
                 type="submit"
                 disabled={loading}
                 className="w-full py-3.5 rounded-xl bg-indigo-500/90 hover:bg-indigo-600 text-white font-medium transition-all duration-300 shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/35 flex items-center justify-center gap-2 disabled:cursor-not-allowed disabled:opacity-70"
               >
                 <FaPaperPlane />
+
                 {loading ? "Sending..." : "Send Message"}
               </button>
 
+              {/* Error Message */}
               {error && (
-  <motion.div
-    initial={{ opacity: 0, y: 10 }}
-    animate={{ opacity: 1, y: 0 }}
-    className="text-center text-red-400 text-sm bg-red-500/10 py-2 rounded-xl border border-red-500/20"
-  >
-    <FaExclamationCircle className="inline mr-1.5" />
-    {error}
-  </motion.div>
-)}
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-center text-red-400 text-sm bg-red-500/10 py-2 rounded-xl border border-red-500/20"
+                >
+                  <FaExclamationCircle className="inline mr-1.5" />
 
+                  {error}
+                </motion.div>
+              )}
+
+              {/* Success Message */}
               {success && (
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
@@ -260,11 +297,14 @@ export default function Contact() {
                   className="text-center text-green-400 text-sm bg-green-500/10 py-2 rounded-xl border border-green-500/20"
                 >
                   <FaCheckCircle className="inline mr-1.5" />
+
                   {success}
                 </motion.div>
               )}
+
             </div>
           </form>
+
         </div>
       </div>
     </Section>

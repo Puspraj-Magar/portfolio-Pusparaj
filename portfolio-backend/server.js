@@ -8,10 +8,10 @@ const contactRoutes = require("./routes/contact.routes");
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Rate limiting to prevent spam submissions
+// Rate limiting
 const apiLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 10, // Limit each IP to 10 requests per windowMs
+    windowMs: 15 * 60 * 1000,
+    max: 10,
     message: {
         success: false,
         error: "Too many message submissions from this IP, please try again later."
@@ -21,25 +21,31 @@ const apiLimiter = rateLimit({
 });
 
 // Middleware
-app.use(cors({
-    origin: process.env.CLIENT_URL || "http://localhost:5173", // Allow react dev port
-    methods: ["POST", "GET"],
-    credentials: true
-}));
+app.use(
+    cors({
+        origin: [
+            process.env.CLIENT_URL || "http://localhost:5173",
+            "http://localhost:5173"
+        ],
+        methods: ["POST", "GET"],
+        credentials: true
+    })
+);
+
 app.use(express.json());
 
-// Apply rate limiter to API contact route
+// Apply rate limiter
 app.use("/api/contact", apiLimiter);
 
 // API Routes
 app.use("/api", contactRoutes);
 
-// Base route for server checking
+// Base route
 app.get("/", (req, res) => {
     res.send("Portfolio Backend API is Running!");
 });
 
-// 404 handler for unmatched routes
+// 404 handler
 app.use((req, res) => {
     res.status(404).json({
         success: false,
@@ -47,8 +53,15 @@ app.use((req, res) => {
     });
 });
 
-// Start Server
-app.listen(PORT, () => {
-    console.log(`🚀 Server running on http://localhost:${PORT}`);
-    console.log(`📬 Contact endpoint: POST http://localhost:${PORT}/api/contact`);
-});
+// Only start server locally
+if (process.env.NODE_ENV !== "production") {
+    app.listen(PORT, () => {
+        console.log(`🚀 Server running on http://localhost:${PORT}`);
+        console.log(
+            `📬 Contact endpoint: POST http://localhost:${PORT}/api/contact`
+        );
+    });
+}
+
+// Export app for Vercel
+module.exports = app;

@@ -4,10 +4,6 @@ const handleContact = async(req, res) => {
     try {
         const { name, email, message } = req.body;
 
-        console.log(`\n📨 Received Contact Request:`);
-        console.log(`- Name: ${name}`);
-        console.log(`- Email: ${email}`);
-        console.log(`- Message: ${message}`);
 
         // 1. Basic validation
         if (!name || !email || !message) {
