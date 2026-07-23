@@ -3,7 +3,13 @@ const { handleContact } = require("../controllers/contact.controller");
 
 const router = express.Router();
 
-// Route: POST /api/contact (note the "/api" prefix is added in server.js)
+router.get("/contact", (req, res) => {
+    res.status(200).json({
+        success: true,
+        message: "Use POST /api/contact to send a message."
+    });
+});
+
 router.post("/contact", handleContact);
 
 module.exports = router;

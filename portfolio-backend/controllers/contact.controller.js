@@ -1,11 +1,9 @@
-const { transporter, receiverEmail } = require("../config/email");
+const { transporter, receiverEmail, isEmailConfigured } = require("../config/email");
 
 const handleContact = async(req, res) => {
     try {
         const { name, email, message } = req.body;
 
-
-        // 1. Basic validation
         if (!name || !email || !message) {
             return res.status(400).json({
                 success: false,
@@ -24,7 +22,6 @@ const handleContact = async(req, res) => {
             });
         }
 
-        // 2. Email syntax validation
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(emailTrim)) {
             return res.status(400).json({
@@ -33,8 +30,13 @@ const handleContact = async(req, res) => {
             });
         }
 
-        // 3. Setup email to Portfolio Owner (You)
-        // replyTo lets you reply to the user's email directly by clicking "Reply" in your inbox
+        if (!isEmailConfigured) {
+            return res.status(503).json({
+                success: false,
+                error: "Email service is not configured on the server. Please add EMAIL_USER, EMAIL_PASS, and RECEIVER_EMAIL in Vercel."
+            });
+        }
+
         const adminMailOptions = {
             from: `"Portfolio Contact Form" <${process.env.EMAIL_USER}>`,
             to: receiverEmail,
@@ -53,11 +55,19 @@ const handleContact = async(req, res) => {
             `
         };
 
-        // 4. Send notification email to Admin
-        await transporter.sendMail(adminMailOptions);
-        console.log("✅ Admin notification email sent successfully");
+        try {
+            await transporter.sendMail(adminMailOptions);
+            console.log("✅ Admin notification email sent successfully");
+        } catch (mailError) {
+            console.error("❌ Failed to send admin notification email:", mailError.message);
+            const authFailure = (mailError && (mailError.code === "EAUTH" || mailError.responseCode === 535)) || /invalid login|missing credentials|username and password not accepted/i.test(mailError.message || "");
+            return res.status(502).json({
+                success: false,
+                error: authFailure ?
+                    "Email authentication failed. Please verify the server email credentials." : "The message could not be sent right now. Please try again later."
+            });
+        }
 
-        // 5. Setup Auto-Reply to Visitor
         const userMailOptions = {
             from: `"Puspraj Magar" <${process.env.EMAIL_USER}>`,
             to: emailTrim,
@@ -77,12 +87,10 @@ const handleContact = async(req, res) => {
             `
         };
 
-        // Send confirmation email (runs asynchronously; won't block response)
         transporter.sendMail(userMailOptions)
             .then(() => console.log("✅ Auto-confirmation email sent to visitor"))
             .catch(err => console.error("⚠️ Failed to send auto-reply email:", err.message));
 
-        // 6. Return response to React
         return res.status(200).json({
             success: true,
             message: "Your message has been sent successfully!"
