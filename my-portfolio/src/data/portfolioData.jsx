@@ -112,5 +112,5 @@ contact: {
     link: "https://github.com/Puspraj-Magar"
   }
 },
-resumeLink: 'PUSPARAJ_MAGAR_Resume.pdf'
+resumeLink: 'Pusparaj_resume.pdf'
 };
