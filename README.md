@@ -6,7 +6,7 @@ A modern, responsive, and interactive personal portfolio website built to showca
 
 ## 🚀 Live Demo
 
-🌐 **Portfolio:** https://portfolio-pusparaj.netlify.app/
+🌐 **Portfolio:** [https://portfolio-pusparaj.netlify.app/](https://portfolio-pusparaj.netlify.app/)
 
 ---
 
