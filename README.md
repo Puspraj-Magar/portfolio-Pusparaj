@@ -82,6 +82,8 @@ my-portfolio/
 │   │   ├── resume.pdf
 │   │   ├── favicon.svg
 │   │   └── icons.svg
+│   │   └── robots.txt
+│   │   └── sitemap.xml
 │   │
 │   ├── src/
 │   │   ├── assets/
