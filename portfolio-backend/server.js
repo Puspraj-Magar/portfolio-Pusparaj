@@ -64,6 +64,17 @@ app.get("/api/contact", (req, res) => {
 
 app.post("/api/contact", handleContact);
 
+// TEMPORARY: Check whether Vercel receives email environment variables
+app.get("/api/debug-email", (req, res) => {
+    res.json({
+        EMAIL_USER: !!process.env.EMAIL_USER,
+        EMAIL_PASS: !!process.env.EMAIL_PASS,
+        RECEIVER_EMAIL: !!process.env.RECEIVER_EMAIL,
+        CLIENT_URL: !!process.env.CLIENT_URL,
+        NODE_ENV: process.env.NODE_ENV || "undefined",
+    });
+});
+
 app.use("/api", contactRoutes);
 
 app.get("/", (req, res) => {
