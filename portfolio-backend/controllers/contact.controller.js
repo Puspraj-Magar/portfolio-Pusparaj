@@ -1,4 +1,9 @@
-const { transporter, receiverEmail, isEmailConfigured } = require("../config/email");
+const {
+    transporter,
+    receiverEmail,
+    emailUser,
+    isEmailConfigured,
+} = require("../config/email");
 
 const handleContact = async(req, res) => {
     try {
@@ -7,104 +12,249 @@ const handleContact = async(req, res) => {
         if (!name || !email || !message) {
             return res.status(400).json({
                 success: false,
-                error: "All fields (name, email, message) are required."
+                error: "All fields (name, email, message) are required.",
             });
         }
 
-        const nameTrim = name.trim();
-        const emailTrim = email.trim();
-        const messageTrim = message.trim();
+        const nameTrim = String(name).trim();
+        const emailTrim = String(email).trim();
+        const messageTrim = String(message).trim();
 
         if (!nameTrim || !emailTrim || !messageTrim) {
             return res.status(400).json({
                 success: false,
-                error: "Fields cannot contain only whitespace."
+                error: "Fields cannot contain only whitespace.",
             });
         }
-
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
         if (!emailRegex.test(emailTrim)) {
             return res.status(400).json({
                 success: false,
-                error: "Please provide a valid email address."
+                error: "Please provide a valid email address.",
             });
         }
 
         if (!isEmailConfigured) {
+            console.error(
+                "❌ Email service is not configured."
+            );
+
             return res.status(503).json({
                 success: false,
-                error: "Email service is not configured on the server. Please add EMAIL_USER, EMAIL_PASS, and RECEIVER_EMAIL in Vercel."
+                error: "Email service is not configured on the server.",
             });
         }
 
         const adminMailOptions = {
-            from: `"Portfolio Contact Form" <${process.env.EMAIL_USER}>`,
+            from: `"Portfolio Contact Form" <${emailUser}>`,
             to: receiverEmail,
             replyTo: emailTrim,
             subject: `💼 New Contact from ${nameTrim}`,
+
             html: `
-                <div style="font-family: sans-serif; padding: 20px; color: #333; max-width: 600px; border: 1px solid #eee; border-radius: 8px;">
-                    <h2 style="color: #4f46e5; border-bottom: 2px solid #4f46e5; padding-bottom: 10px;">New Message Received</h2>
-                    <p><strong>Name:</strong> ${nameTrim}</p>
-                    <p><strong>Email:</strong> <a href="mailto:${emailTrim}">${emailTrim}</a></p>
-                    <p><strong>Message:</strong></p>
-                    <div style="background-color: #f9fafb; padding: 15px; border-left: 4px solid #4f46e5; border-radius: 4px; white-space: pre-wrap;">${messageTrim}</div>
-                    <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
-                    <p style="font-size: 0.85em; color: #666;">Sent from your portfolio website on ${new Date().toLocaleString()}</p>
+                <div style="
+                    font-family: Arial, sans-serif;
+                    padding: 20px;
+                    color: #333;
+                    max-width: 600px;
+                    border: 1px solid #eee;
+                    border-radius: 8px;
+                ">
+
+                    <h2 style="
+                        color: #4f46e5;
+                        border-bottom: 2px solid #4f46e5;
+                        padding-bottom: 10px;
+                    ">
+                        New Message Received
+                    </h2>
+
+                    <p>
+                        <strong>Name:</strong>
+                        ${nameTrim}
+                    </p>
+
+                    <p>
+                        <strong>Email:</strong>
+                        <a href="mailto:${emailTrim}">
+                            ${emailTrim}
+                        </a>
+                    </p>
+
+                    <p>
+                        <strong>Message:</strong>
+                    </p>
+
+                    <div style="
+                        background-color: #f9fafb;
+                        padding: 15px;
+                        border-left: 4px solid #4f46e5;
+                        border-radius: 4px;
+                        white-space: pre-wrap;
+                    ">
+                        ${messageTrim}
+                    </div>
+
+                    <hr style="
+                        border: 0;
+                        border-top: 1px solid #eee;
+                        margin: 20px 0;
+                    ">
+
+                    <p style="
+                        font-size: 0.85em;
+                        color: #666;
+                    ">
+                        Sent from your portfolio website on
+                        ${new Date().toLocaleString()}
+                    </p>
+
                 </div>
-            `
+            `,
         };
 
         try {
             await transporter.sendMail(adminMailOptions);
-            console.log("✅ Admin notification email sent successfully");
+
+            console.log(
+                "✅ Admin notification email sent successfully"
+            );
         } catch (mailError) {
-            console.error("❌ Failed to send admin notification email:", mailError.message);
-            const authFailure = (mailError && (mailError.code === "EAUTH" || mailError.responseCode === 535)) || /invalid login|missing credentials|username and password not accepted/i.test(mailError.message || "");
+            console.error(
+                "❌ Failed to send admin notification email:"
+            );
+
+            console.error(mailError);
+
+            // Detect Gmail authentication errors
+            const authFailure =
+                (
+                    mailError &&
+                    (
+                        mailError.code === "EAUTH" ||
+                        mailError.responseCode === 535
+                    )
+                ) ||
+                /invalid login|missing credentials|username and password not accepted/i
+                .test(mailError.message || "");
+
             return res.status(502).json({
                 success: false,
+
                 error: authFailure ?
-                    "Email authentication failed. Please verify the server email credentials." : "The message could not be sent right now. Please try again later."
+                    "Email authentication failed. Please verify the server email credentials." : "The message could not be sent right now. Please try again later.",
             });
         }
 
+        // --------------------------------
+        // 9. Auto-reply email to visitor
+        // --------------------------------
         const userMailOptions = {
-            from: `"Puspraj Magar" <${process.env.EMAIL_USER}>`,
+            from: `"Puspraj Magar" <${emailUser}>`,
             to: emailTrim,
             subject: "Thank you for reaching out!",
+
             html: `
-                <div style="font-family: sans-serif; padding: 20px; color: #333; max-width: 600px; border: 1px solid #eee; border-radius: 8px;">
-                    <h2 style="color: #4f46e5;">Hi ${nameTrim},</h2>
-                    <p>Thank you for reaching out! I've received your message and will read it as soon as possible.</p>
-                    <p>I usually respond within 24-48 hours. If it's urgent, please reach out via LinkedIn or Phone.</p>
-                    <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
-                    <h3 style="color: #666; font-size: 1.1em;">Here is a copy of your message:</h3>
-                    <div style="background-color: #f9fafb; padding: 15px; border-left: 4px solid #9ca3af; border-radius: 4px; white-space: pre-wrap;">${messageTrim}</div>
+                <div style="
+                    font-family: Arial, sans-serif;
+                    padding: 20px;
+                    color: #333;
+                    max-width: 600px;
+                    border: 1px solid #eee;
+                    border-radius: 8px;
+                ">
+
+                    <h2 style="color: #4f46e5;">
+                        Hi ${nameTrim},
+                    </h2>
+
+                    <p>
+                        Thank you for reaching out!
+                        I've received your message and will read it
+                        as soon as possible.
+                    </p>
+
+                    <p>
+                        I usually respond within 24-48 hours.
+                        If it's urgent, please reach out via LinkedIn or Phone.
+                    </p>
+
+                    <hr style="
+                        border: 0;
+                        border-top: 1px solid #eee;
+                        margin: 20px 0;
+                    ">
+
+                    <h3 style="
+                        color: #666;
+                        font-size: 1.1em;
+                    ">
+                        Here is a copy of your message:
+                    </h3>
+
+                    <div style="
+                        background-color: #f9fafb;
+                        padding: 15px;
+                        border-left: 4px solid #9ca3af;
+                        border-radius: 4px;
+                        white-space: pre-wrap;
+                    ">
+                        ${messageTrim}
+                    </div>
+
                     <br>
-                    <p>Best regards,</p>
-                    <p><strong>Puspraj Magar</strong><br><span style="color: #666; font-size: 0.9em;">Software Engineer & Portfolio Owner</span></p>
+
+                    <p>
+                        Best regards,
+                    </p>
+
+                    <p>
+                        <strong>Puspraj Magar</strong>
+                        <br>
+
+                        <span style="
+                            color: #666;
+                            font-size: 0.9em;
+                        ">
+                            Software Engineer & Portfolio Owner
+                        </span>
+                    </p>
+
                 </div>
-            `
+            `,
         };
 
-        transporter.sendMail(userMailOptions)
-            .then(() => console.log("✅ Auto-confirmation email sent to visitor"))
-            .catch(err => console.error("⚠️ Failed to send auto-reply email:", err.message));
+        try {
+            await transporter.sendMail(userMailOptions);
 
+            console.log(
+                "✅ Auto-confirmation email sent to visitor"
+            );
+        } catch (err) {
+            console.error(
+                "⚠️ Failed to send auto-reply email:",
+                err.message
+            );
+        }
         return res.status(200).json({
             success: true,
-            message: "Your message has been sent successfully!"
+            message: "Your message has been sent successfully!",
         });
 
     } catch (error) {
-        console.error("❌ Contact controller error:", error);
+        console.error(
+            "❌ Contact controller error:",
+            error
+        );
+
         return res.status(500).json({
             success: false,
-            error: "Internal Server Error. Please try again later."
+            error: "Internal Server Error. Please try again later.",
         });
     }
 };
 
 module.exports = {
-    handleContact
+    handleContact,
 };

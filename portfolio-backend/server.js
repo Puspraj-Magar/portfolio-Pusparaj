@@ -21,6 +21,9 @@ const allowedOrigins = [
 
 const corsOptions = {
     origin: function(origin, callback) {
+
+        // Allow requests without origin
+        // such as Postman
         if (!origin) {
             return callback(null, true);
         }
@@ -29,10 +32,21 @@ const corsOptions = {
             return callback(null, true);
         }
 
-        return callback(new Error("Not allowed by CORS"));
+        return callback(
+            new Error("Not allowed by CORS")
+        );
     },
-    methods: ["GET", "POST", "OPTIONS"],
-    allowedHeaders: ["Content-Type"],
+
+    methods: [
+        "GET",
+        "POST",
+        "OPTIONS",
+    ],
+
+    allowedHeaders: [
+        "Content-Type",
+    ],
+
     credentials: true,
 };
 
@@ -53,45 +67,78 @@ const apiLimiter = rateLimit({
     legacyHeaders: false,
 });
 
-app.use("/api/contact", apiLimiter);
+app.use(
+    "/api/contact",
+    apiLimiter
+);
 
-app.get("/api/contact", (req, res) => {
-    res.status(200).json({
-        success: true,
-        message: "Use POST /api/contact to send a message."
-    });
-});
+app.get(
+    "/api/contact",
+    (req, res) => {
 
-app.post("/api/contact", handleContact);
+        return res.status(200).json({
+            success: true,
+            message: "Use POST /api/contact to send a message.",
+        });
+    }
+);
 
-// TEMPORARY: Check whether Vercel receives email environment variables
-app.get("/api/debug-email", (req, res) => {
-    res.json({
-        EMAIL_USER: !!process.env.EMAIL_USER,
-        EMAIL_PASS: !!process.env.EMAIL_PASS,
-        RECEIVER_EMAIL: !!process.env.RECEIVER_EMAIL,
-        CLIENT_URL: !!process.env.CLIENT_URL,
-        NODE_ENV: process.env.NODE_ENV || "undefined",
-    });
-});
+app.post(
+    "/api/contact",
+    handleContact
+);
 
-app.use("/api", contactRoutes);
+app.get(
+    "/api/debug-email",
+    (req, res) => {
 
-app.get("/", (req, res) => {
-    res.send("Portfolio Backend API is Running!");
-});
+        return res.status(200).json({
+            EMAIL_USER: Boolean(process.env.EMAIL_USER),
+            EMAIL_PASS: Boolean(process.env.EMAIL_PASS),
+            RECEIVER_EMAIL: Boolean(process.env.RECEIVER_EMAIL),
+            CLIENT_URL: Boolean(process.env.CLIENT_URL),
+            NODE_ENV: process.env.NODE_ENV || "undefined",
+            VERCEL: Boolean(process.env.VERCEL),
+        });
+    }
+);
 
-app.use((req, res) => {
-    res.status(404).json({
-        success: false,
-        message: "Route not found",
-    });
-});
+app.use(
+    "/api",
+    contactRoutes
+);
+
+app.get(
+    "/",
+    (req, res) => {
+
+        return res.status(200).send(
+            "Portfolio Backend API is Running!"
+        );
+    }
+);
+
+app.use(
+    (req, res) => {
+
+        return res.status(404).json({
+            success: false,
+            message: "Route not found",
+        });
+    }
+);
 
 if (!process.env.VERCEL) {
-    app.listen(PORT, () => {
-        console.log(`🚀 Server running on http://localhost:${PORT}`);
-    });
+
+    app.listen(
+        PORT,
+        () => {
+
+            console.log(
+                `🚀 Server running on http://localhost:${PORT}`
+            );
+        }
+    );
 }
 
 module.exports = app;
